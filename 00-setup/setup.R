@@ -1,3 +1,4 @@
+library(mar)
 library(mfdb)
 library(tidyverse)
 library(Rgadget)
@@ -6,6 +7,8 @@ library(infuser)
 bootstrap <- FALSE
 ## Create a gadget directory, define some defaults to use with our queries below
 gd <- gadget_directory("01-firsttry")
+
+mar <- dbConnect(dbDriver('Oracle'))
 mdb<-mfdb('Iceland')#,db_params=list(host='hafgeimur.hafro.is'))
 
 year_range <- 1982:2016 #CHANGE?
@@ -58,20 +61,20 @@ Sys.setenv(GADGET_WORKING_DIR=normalizePath(gd$dir))
 callGadget(l=1,i='params.in',p='params.init')
 
 if(FALSE){
-  source('41-shrimp/00-setup/setup-fixed_slope.R')
+  source('00-setup/setup-fixed_slope.R')
   ## setting up model variants
-  source('41-shrimp/00-setup/setup-est_slope.R')
+  source('00-setup/setup-est_slope.R')
   #source('06-sh/00-setup/setup-three_fleets.R')
-  source('41-shrimp/00-setup/setup-single_fleet.R')
+  source('00-setup/setup-single_fleet.R')
 }
 
 
 if(bootstrap){
-  source('41-shrimp/00-setup/setup-bootstrap.R')
+  source('00-setup/setup-bootstrap.R')
   file.copy(sprintf('%s/bootrun.R','41-shrimp/00-setup'),gd$dir)
 }
 
-file.copy(sprintf('%s/itterfitter.sh','41-shrimp/00-setup'),gd$dir)
-file.copy(sprintf('%s/run.R','41-shrimp/00-setup'),gd$dir)
-file.copy(sprintf('%s/optinfofile','41-shrimp/00-setup'),gd$dir)
+file.copy(sprintf('%s/itterfitter.sh','00-setup'),gd$dir)
+file.copy(sprintf('%s/run.R','00-setup'),gd$dir)
+file.copy(sprintf('%s/optinfofile','00-setup'),gd$dir)
 #file.copy(sprintf('%s/run-fixed_slope.R','41-shrimp/00-setup'),gd$dir)

@@ -92,10 +92,10 @@ sh.imm <-
                                          number = parse(text=sprintf('sh.rec.scalar*sh.rec.%s',year)) %>% 
                                            map(to.gadget.formulae) %>% 
                                            unlist(),
-                                         mean = von_b_formula(age,linf='sh.Linf',k='shmat.k',recl='sh.recl'),
+                                         mean = von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'),
                                          stddev = '#sh.rec.sd',
                                          alpha = '#shimm.walpha',
-                                         beta = '#shimm.wbeta')) 
+                                         beta = '#shimm.wbeta')) #this shimm.k was shmat.k
 
 
 
@@ -111,7 +111,7 @@ sh.mat <-
                 livesonareas = 1) %>%
   gadget_update('doesgrow', ## note to self the order of these parameters make difference
                 growthparameters=c(linf='#sh.Linf', 
-                                   k=to.gadget.formulae(quote(0.001*sh.k)),
+                                   k=to.gadget.formulae(quote(0.001*shmat.k)),
                                    alpha = '#shimm.walpha',
                                    beta = '#shimm.wbeta'),
                 beta = to.gadget.formulae(quote(10*sh.bbin)),
