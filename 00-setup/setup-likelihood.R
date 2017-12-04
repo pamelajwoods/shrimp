@@ -38,14 +38,14 @@ gadgetlikelihood('likelihood',gd$dir,missingOkay = TRUE) %>%
                 data = matp.ins[[1]], 
                 fleetnames = c("ins"),
                 stocknames =stock_names) %>% 
-  gadget_update("surveyindices",
-                name = "si1",
-                weight = 1,
-                biomass = 1,
-                data = ins.SI[[1]] %>% filter(step==1),
-                fittype = 'fixedslopeloglinearfit',
-                slope = 1,
-                stocknames = stock_names) %>% 
+  # gadget_update("surveyindices",
+  #               name = "si1",
+  #               weight = 1,
+  #               biomass = 1,
+  #               data = ins.SI[[1]] %>% filter(step==1),
+  #               fittype = 'fixedslopeloglinearfit',
+  #               slope = 1,
+  #               stocknames = stock_names) %>% 
   gadget_update("surveyindices",
                 name = "si2",
                 weight = 1,

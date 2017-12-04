@@ -12,6 +12,8 @@ init_growth<-function(dl = 1, n_ages = 10, first3ages = 1:3, first3lengths = c(1
       bbin_bounds <-
       mat_l50_firstguess<-
       mat_l50_bounds<-
+        #make sure these do not return Inf
+      suitability
       1/(1+exp(-0.001*20000*(seq(1.5,2,0.1)-1.9)))
         
     suggestions<-list(rec_length = (first3lengths[1]),

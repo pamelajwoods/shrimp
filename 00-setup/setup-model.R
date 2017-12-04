@@ -149,20 +149,20 @@ callGadget(s=1,log = 'init.log') #ignore.stderr = FALSE,
 ## update the input parameters with sane initial guesses
 read.gadget.parameters(sprintf('%s/params.out',gd$dir)) %>% 
   init_guess('rec.[0-9]|init.[0-9]',1,0.001,1000,1) %>%
-  init_guess('recl',1.1,1.0,1.2,1) %>% 
+  init_guess('recl',1,0.9,1.1,1) %>% 
   init_guess('rec.sd',0.05, 0.01, 0.1,1) %>% 
   init_guess('Linf',3.6, 3, 5,1) %>% 
   init_guess('k$',350, 30, 500,1) %>% 
   init_guess('bbin',5, 1, 8, 1) %>% 
-  init_guess('alpha', 0.5,  0.01, 3, 1) %>% 
+  init_guess('alpha', 300,  100, 1000, 1) %>% 
   init_guess('l50',1,0.4,1.5,1) %>% 
   init_guess('walpha',lw.constants$estimate[1], 1e-10, 1,0) %>% 
   init_guess('wbeta',lw.constants$estimate[2], 2, 4,0) %>% 
-  init_guess('M$',0.15,0.001,1,0) %>% 
-  init_guess('rec.scalar',400,1,1000,1) %>% 
-  init_guess('init.scalar',400,1,1000,1) %>% 
+  init_guess('M$',0.2,0.001,1,0) %>% 
+  init_guess('rec.scalar',400,1,500,1) %>% 
+  init_guess('init.scalar',400,1,500,1) %>% 
   init_guess('mat2',mat.l50$l50,0.9*mat.l50$l50,1.1*mat.l50$l50,1) %>% 
-  init_guess('mat1',20000,  2000, 50000, 1) %>% 
+  init_guess('mat1',5000, 2000, 20000, 1) %>% 
   init_guess('init.F',0.4,0.1,1,1) %>% 
   # init_guess('p0',0,0,1,1) %>% 
   # init_guess('p2',1,0,1,1) %>% 

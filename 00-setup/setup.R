@@ -1,3 +1,7 @@
+#devtools::install_github('mareframe/mfdb',ref='5.x')
+#devtools::install_github('fishvice/mar', force = TRUE)
+#devtools::install_github('Hafro/rgadget')
+#install.packages("tidyverse")
 library(mar)
 library(mfdb)
 library(tidyverse)
@@ -11,7 +15,7 @@ gd <- gadget_directory("01-firsttry")
 mar <- dbConnect(dbDriver('Oracle'))
 mdb<-mfdb('Iceland')#,db_params=list(host='hafgeimur.hafro.is'))
 
-year_range <- 1982:2016 #CHANGE?
+year_range <- 1988:2016 #CHANGE?
 base_dir <- '41-shrimp'
 mat_stock <- 'shmat'
 imm_stock <- 'shimm'
@@ -26,7 +30,7 @@ reitmapping <-
   #       header=TRUE,
   #       as.is=TRUE)
 mfdb_timestep_biannually$'1'<-c(3,4,5,6,7,8)
-mfdb_timestep_biannually$'1'<-c(9,10,11,12,1,2)
+mfdb_timestep_biannually$'2'<-c(9,10,11,12,1,2)
 
 defaults <- list(
     area = mfdb_group("1" = grep("52_",reitmapping$SUBDIVISION, value = T)), #mfdb_group("1" = unique(reitmapping$SUBDIVISION)),
