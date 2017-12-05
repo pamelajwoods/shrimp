@@ -3,21 +3,28 @@
 
 ## INS survey indices
 
-ins.SI <- 
+ins1.SI <- 
   mfdb_sample_totalweight(mdb, c('length'), c(list(
     data_source = 'iceland-ldist', #why data-source ldist here but not in catch distributions
-    sampling_type = 'INS',
-    #month = 1:6,
+    sampling_type = c('INS','XS','XINS'),
+    gear = 'SHT',
+    #month = 1:3,
     length = mfdb_interval("len", c(0.5, 2.5),open_ended = c('upper','lower'))),
     defaults))
 
-# ins2.SI <- 
-#   mfdb_sample_totalweight(mdb, c('length'), c(list(
-#     data_source = 'iceland-ldist', #why data-source ldist here but not in catch distributions
-#     sampling_type = 'INS',
-#     month = 7:12,
-#     length = mfdb_interval("len", c(0.5, 2.5),open_ended = c('upper','lower'))),
-#     defaults))
+ ins2.SI <- 
+   mfdb_sample_totalweight(mdb, c('length'), c(list(
+     data_source = 'iceland-ldist', #why data-source ldist here but not in catch distributions
+     sampling_type = c('INS','XS','XINS'), #XS and XINS contribute nothing
+     gear = 'TMS',
+     #month = 7:12,
+     length = mfdb_interval("len", c(0.5, 2.5),open_ended = c('upper','lower'))),
+     defaults)) 
+ 
+ # test<-mfdb_dplyr_sample(mdb)%>%
+ #   filter(species == 'SHR', sampling_type == 'INS', gear == 'TMS', year == 2005, data_source == 'iceland-ldist') %>% 
+ #   as.tibble()
+
 
 #for comparison later
 ins.SI1 <- 
@@ -74,8 +81,8 @@ fixup_indices<-function(data){
   data %>% filter(!is.na(number)) 
 }
 
-  ins.SI[[1]]<-fixup_indices(ins.SI[[1]])
-  ins.SI1[[1]]<-fixup_indices(ins.SI1[[1]])
+  ins1.SI[[1]]<-fixup_indices(ins1.SI[[1]])
+  ins2.SI[[1]]<-fixup_indices(ins2.SI[[1]])
   ins.SI2[[1]]<-fixup_indices(ins.SI2[[1]])
   ins.SI3[[1]]<-fixup_indices(ins.SI3[[1]])
   ins.SI4[[1]]<-fixup_indices(ins.SI4[[1]])

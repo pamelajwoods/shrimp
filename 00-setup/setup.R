@@ -15,7 +15,7 @@ gd <- gadget_directory("01-firsttry")
 mar <- dbConnect(dbDriver('Oracle'))
 mdb<-mfdb('Iceland')#,db_params=list(host='hafgeimur.hafro.is'))
 
-year_range <- 1988:2016 #CHANGE?
+year_range <- 1986:2016 #CHANGE?
 base_dir <- '41-shrimp'
 mat_stock <- 'shmat'
 imm_stock <- 'shimm'
@@ -29,12 +29,17 @@ reitmapping <-
   #       system.file("demo-data", "reitmapping.tsv", package="mfdb"),
   #       header=TRUE,
   #       as.is=TRUE)
-mfdb_timestep_biannually$'1'<-c(3,4,5,6,7,8)
-mfdb_timestep_biannually$'2'<-c(9,10,11,12,1,2)
+#mfdb_timestep_biannually$'1'<-1:6#c(3,4,5,6,7,8)
+#mfdb_timestep_biannually$'2'<-7:12#c(9,10,11,12,1,2)
+
+mfdb_timestep_quarterly$'1'<-c(12,1,2)
+mfdb_timestep_quarterly$'2'<-c(3,4,5)
+mfdb_timestep_quarterly$'3'<-c(6,7,8)
+mfdb_timestep_quarterly$'4'<-c(9,10,11)
 
 defaults <- list(
     area = mfdb_group("1" = grep("52_",reitmapping$SUBDIVISION, value = T)), #mfdb_group("1" = unique(reitmapping$SUBDIVISION)),
-    timestep = mfdb_timestep_biannually,
+    timestep = mfdb_timestep_quarterly,
     year = year_range,
     species = 'SHR')
 
@@ -44,8 +49,8 @@ gadgetfile('Modelfiles/time',
            components = list(list(firstyear = min(defaults$year),
                                   firststep=1,
                                   lastyear=max(defaults$year),
-                                  laststep=2,
-                                  notimesteps=c(2,6,6)))) %>% 
+                                  laststep=length(defaults$timestep),
+                                  notimesteps=c(length(defaults$timestep),rep(12/length(defaults$timestep), length.out = length(defaults$timestep)))))) %>% 
   write.gadget.file(gd$dir)
 
 ## Write out areafile and update mainfile with areafile location

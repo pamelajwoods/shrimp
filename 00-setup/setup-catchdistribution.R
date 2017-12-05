@@ -5,14 +5,14 @@ minlength <- sh.imm[[1]]$minlength
 dl <- sh.imm[[1]]$dl
 
 ## Query length data to create IGFS catchdistribution components
-ldist.ins <-
+ldist.ins1 <-
   mfdb_sample_count(mdb, 
                     c('age', 'length'), 
                     c(list(
                       data_source = 'iceland-ldist',
-                      sampling_type = c('INS'),
-                      month = 1:12,
-                      gear=c('TMS', 'SHT'),
+                      sampling_type = c('INS', 'XS','XINS'),
+                      #month = 9:11,
+                      gear=c('SHT'),
                       age = mfdb_interval("all",c(minage,maxage),
                                        open_ended = c("upper","lower")),
                       length = mfdb_interval("len", 
@@ -20,6 +20,20 @@ ldist.ins <-
                                              open_ended = c("upper","lower"))),
                       defaults))
 
+ldist.ins2 <-
+  mfdb_sample_count(mdb, 
+                    c('age', 'length'), 
+                    c(list(
+                      data_source = 'iceland-ldist',
+                      sampling_type = c('INS','XS','XINS'), #XS and XINS contribute nothing 
+                      #month = 9:11,
+                      gear=c('TMS'),
+                      age = mfdb_interval("all",c(minage,maxage),
+                                          open_ended = c("upper","lower")),
+                      length = mfdb_interval("len", 
+                                             seq(minlength, maxlength, by = dl),
+                                             open_ended = c("upper","lower"))),
+                      defaults))
 
 
 # for(i in seq_along(ldist.igfs)){
@@ -44,31 +58,32 @@ ldist.ins <-
 #   attr(attributes(aldist.igfs[[i]])$length$len0,'min') <- minlength
 # }
 
-matp.ins <- 
+matp.ins1 <- 
   mfdb_sample_count(mdb, c('sex','age','length'),
                     append(defaults,
                            list(sampling_type='INS',
+                                gear = 'SHT',
                                 #age=mfdb_group(mat_ages=minage:maxage),
                                 length = mfdb_interval('len',
                                                        seq(minlength, maxlength, by = dl),
                                                        open_ended = c('lower','upper')),              
                                 sex = mfdb_group(shimm = 'M', shmat = 'F'))))
-names(matp.ins[[1]])[4]<-"maturity_stage"
+names(matp.ins1[[1]])[4]<-"maturity_stage"
 
 
 
-ldist.sht <- 
-  mfdb_sample_count(mdb,
-                    c('age', 'length'), 
-                    c(list(
-                      sampling_type = c('SEA','XS','XINS'),
-                      data_source = 'iceland-ldist',
-                      year = 1988:2016,
-                      gear=c('SHT'),
-                      age = mfdb_interval("all",c(minage,maxage),
-                                          open_ended = c("upper","lower")),
-                      length = mfdb_interval("len", 
-                                             seq(minlength, maxlength, by = dl),
-                                             open_ended = c("upper","lower"))),
-                      defaults))
-
+# ldist.tms <- 
+#   mfdb_sample_count(mdb,
+#                     c('age', 'length'), 
+#                     c(list(
+#                       sampling_type = c('SEA'),
+#                       data_source = 'iceland-ldist',
+#                       #year = 1988:2016,
+#                       #gear=c('TMS'),
+#                       age = mfdb_interval("all",c(minage,maxage),
+#                                           open_ended = c("upper","lower")),
+#                       length = mfdb_interval("len", 
+#                                              seq(minlength, maxlength, by = dl),
+#                                              open_ended = c("upper","lower"))),
+#                       defaults))
+#NO ENTRIES!

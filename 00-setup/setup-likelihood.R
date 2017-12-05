@@ -1,9 +1,9 @@
 
 
 # ## weird inconsistencies in Gadget
-# aldist.igfs[[1]]$step <- 2
-# ldist.igfs[[1]]$step <- 2
-# matp.igfs[[1]]$step <- 2
+# aldist.ins[[1]]$step <- 2
+# ldist.ins[[1]]$step <- 2
+# matp.ins[[1]]$step <- 2
 
 
 gadgetlikelihood('likelihood',gd$dir,missingOkay = TRUE) %>% 
@@ -21,84 +21,91 @@ gadgetlikelihood('likelihood',gd$dir,missingOkay = TRUE) %>%
                 name = "understocking",
                 weight = "100") %>% #
   gadget_update("catchdistribution",
-                name = "ldist.ins",
+                name = "ldist.ins1",
                 weight = 1,
-                data = ldist.ins[[1]],
-                fleetnames = c("ins"),
+                data = ldist.ins1[[1]],
+                fleetnames = c("ins1"),
                 stocknames =stock_names) %>% 
   gadget_update("catchdistribution",
-                name = "ldist.sht",
+                name = "ldist.ins2",
                 weight = 1,
-                data = ldist.sht[[1]], 
-                fleetnames = c("sht"),
-                stocknames = stock_names) %>% 
-  gadget_update("stockdistribution",
-                name = "matp.ins",
-                weight = 1,
-                data = matp.ins[[1]], 
-                fleetnames = c("ins"),
+                data = ldist.ins2[[1]],
+                fleetnames = c("ins2"),
                 stocknames =stock_names) %>% 
-  # gadget_update("surveyindices",
-  #               name = "si1",
+  # gadget_update("catchdistribution",
+  #               name = "ldist.tms",
   #               weight = 1,
-  #               biomass = 1,
-  #               data = ins.SI[[1]] %>% filter(step==1),
-  #               fittype = 'fixedslopeloglinearfit',
-  #               slope = 1,
+  #               data = ldist.tms[[1]], 
+  #               fleetnames = c("tms"),
   #               stocknames = stock_names) %>% 
+  gadget_update("stockdistribution",
+                name = "matp.ins1",
+                weight = 1,
+                data = matp.ins1[[1]], 
+                fleetnames = c("ins1"),
+                stocknames =stock_names) %>% 
+  gadget_update("surveyindices",
+                name = "si1",
+                weight = 1,
+                biomass = 1,
+                data = ins1.SI[[1]] %>% filter(step == 4), #not sure why it only takes step = 1
+                fittype = 'fixedslopeloglinearfit',
+                slope = 1,
+                stocknames = stock_names) %>%
   gadget_update("surveyindices",
                 name = "si2",
                 weight = 1,
                 biomass = 1,
-                data = ins.SI[[1]] %>% filter(step==2),
+                data = ins2.SI[[1]],
                 fittype = 'fixedslopeloglinearfit',
                 slope = 1,
-                stocknames = stock_names) %>% 
-  # gadget_update("surveyindices",
-  #               name = "si.20-50",
+                stocknames = stock_names) %>%
+  # gadget_update("surveyindices", ADD BIOMASS = 1
+  #               name = "si1",
   #               weight = 1,
-  #               data = igfs.SI1[[1]],
+  #               data = ins.SI1[[1]],
   #               fittype = 'loglinearfit',
-  #               stocknames = stock_names) %>% 
+  #               stocknames = stock_names) %>%
   # gadget_update("surveyindices",
-  #               name = "si.50-60",
+  #               name = "si2",
   #               weight = 1,
-  #               data = igfs.SI2a[[1]],
-  #               fittype = 'loglinearfit',
-  #               stocknames = stock_names) %>% 
+  #               data = ins.SI2[[1]],
+  #               fittype = 'fixedslopeloglinearfit',
+  #               slope = 1,
+  #               stocknames = stock_names) %>%
   # gadget_update("surveyindices",
-  #               name = "si.60-70",
+  #               name = "si3",
   #               weight = 1,
-  #               data = igfs.SI2b[[1]],
+  #               data = ins.SI3[[1]],
   #               fittype = 'fixedslopeloglinearfit',
   #               slope=1,
-  #               stocknames = stock_names) %>% 
+  #               stocknames = stock_names) %>%
   # gadget_update("surveyindices",
-  #               name = "si.70-80",
+  #               name = "si4",
   #               weight = 1,
-  #               data = igfs.SI3a[[1]],
+  #               data = ins.SI4[[1]],
   #               fittype = 'fixedslopeloglinearfit',
   #               slope=1,
-  #               stocknames = stock_names) %>% 
+  #               stocknames = stock_names) %>%
   # gadget_update("surveyindices",
-  #               name = "si.80-90",
+  #               name = "si5",
   #               weight = 1,
-  #               data = igfs.SI3b[[1]],
+  #               data = ins.SI5[[1]],
   #               fittype = 'fixedslopeloglinearfit',
   #               slope=1,
-  #               stocknames = stock_names) %>% 
+  #               stocknames = stock_names) %>%
   # gadget_update("surveyindices",
-  #               name = "si.90-100",
+  #               name = "si6",
   #               weight = 1,
-  #               data = igfs.SI3c[[1]],
+  #               data = ins.SI6[[1]],
   #               fittype = 'fixedslopeloglinearfit',
   #               slope=1,
-  #               stocknames = stock_names) %>% 
+  #               stocknames = stock_names) %>%
   # gadget_update("surveyindices",
-  #               name = "si.100-160",
+  #               name = "si7",
   #               weight = 1,
-  #               data = igfs.SI3d[[1]],
+  #               data = ins.SI7[[1]],
   #               fittype = 'fixedslopeloglinearfit',
   #               slope=1,
-  #               stocknames = stock_names) %>% 
+  #               stocknames = stock_names) %>%
    write.gadget.file(gd$dir)

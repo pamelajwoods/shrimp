@@ -111,7 +111,7 @@ sh.mat <-
                 livesonareas = 1) %>%
   gadget_update('doesgrow', ## note to self the order of these parameters make difference
                 growthparameters=c(linf='#sh.Linf', 
-                                   k=to.gadget.formulae(quote(0.001*shmat.k)),
+                                   k=to.gadget.formulae(quote(0.001*shimm.k)),
                                    alpha = '#shimm.walpha',
                                    beta = '#shimm.wbeta'),
                 beta = to.gadget.formulae(quote(10*sh.bbin)),
@@ -123,7 +123,7 @@ sh.mat <-
                                            map(to.gadget.formulae) %>% 
                                            unlist(),
                                          area.factor = '#shmat.init.scalar',
-                                         mean = von_b_formula(age,linf='sh.Linf',k='shmat.k',recl='sh.recl'),
+                                         mean = von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'),
                                          stddev = init.sigma$ms[age],
                                          alpha = '#shmat.walpha',
                                          beta = '#shmat.wbeta')) %>% 
