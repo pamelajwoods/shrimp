@@ -68,7 +68,7 @@ sh.imm <-
                                            map(to.gadget.formulae) %>% 
                                            unlist(),   
                                          area.factor = '#shimm.init.scalar',
-                                         mean = von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'),
+                                         mean = c(1, 1.5, 1.75, 2, 2.25, 2.75),#von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'), # 
                                          stddev = init.sigma$ms[age],
                                          alpha = '#shimm.walpha',
                                          beta = '#shimm.wbeta')) %>% 
@@ -92,7 +92,7 @@ sh.imm <-
                                          number = parse(text=sprintf('sh.rec.scalar*sh.rec.%s',year)) %>% 
                                            map(to.gadget.formulae) %>% 
                                            unlist(),
-                                         mean = von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'),
+                                         mean ='#sh.recl',#von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'), # 
                                          stddev = '#sh.rec.sd',
                                          alpha = '#shimm.walpha',
                                          beta = '#shimm.wbeta')) #this shimm.k was shmat.k
@@ -123,7 +123,7 @@ sh.mat <-
                                            map(to.gadget.formulae) %>% 
                                            unlist(),
                                          area.factor = '#shmat.init.scalar',
-                                         mean = von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'),
+                                         mean = c(1, 1.5, 1.75, 2, 2.25, 2.75),#von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'),#
                                          stddev = init.sigma$ms[age],
                                          alpha = '#shmat.walpha',
                                          beta = '#shmat.wbeta')) %>% 
@@ -148,22 +148,22 @@ callGadget(s=1,log = 'init.log') #ignore.stderr = FALSE,
 
 ## update the input parameters with sane initial guesses
 read.gadget.parameters(sprintf('%s/params.out',gd$dir)) %>% 
-  init_guess('rec.[0-9]|init.[0-9]',1,0.001,1000,1) %>%
+  init_guess('rec.[0-9]|init.[0-9]',1,0.001,500,1) %>%
   init_guess('recl',1,0.9,1.1,1) %>% 
   init_guess('rec.sd',0.05, 0.01, 0.1,1) %>% 
-  init_guess('Linf',3.6, 3, 5,1) %>% 
+  init_guess('Linf',3, 2.5, 5,1) %>% 
   init_guess('k$',350, 30, 500,1) %>% 
   init_guess('bbin',5, 1, 8, 1) %>% 
   init_guess('alpha', 300,  100, 1000, 1) %>% 
   init_guess('l50',1,0.4,1.5,1) %>% 
   init_guess('walpha',lw.constants$estimate[1], 1e-10, 1,0) %>% 
   init_guess('wbeta',lw.constants$estimate[2], 2, 4,0) %>% 
-  init_guess('M$',0.2,0.001,1,0) %>% 
-  init_guess('rec.scalar',400,1,500,1) %>% 
+  init_guess('M$',0.6,0.001,1,0) %>% 
+  init_guess('rec.scalar',400,1,500,0) %>% 
   init_guess('init.scalar',400,1,500,1) %>% 
   init_guess('mat2',mat.l50$l50,0.9*mat.l50$l50,1.1*mat.l50$l50,1) %>% 
   init_guess('mat1',5000, 2000, 20000, 1) %>% 
-  init_guess('init.F',0.4,0.1,1,1) %>% 
+  init_guess('init.F',0.15,0.1,1,1) %>% 
   # init_guess('p0',0,0,1,1) %>% 
   # init_guess('p2',1,0,1,1) %>% 
   # init_guess('p3',1,0.01,100,1) %>% 

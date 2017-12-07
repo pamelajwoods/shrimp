@@ -5,6 +5,8 @@
 # ldist.ins[[1]]$step <- 2
 # matp.ins[[1]]$step <- 2
 
+ins1.SI[[1]]$step <-4
+
 
 gadgetlikelihood('likelihood',gd$dir,missingOkay = TRUE) %>% 
   ## Write a penalty component to the likelihood file
@@ -44,68 +46,130 @@ gadgetlikelihood('likelihood',gd$dir,missingOkay = TRUE) %>%
                 data = matp.ins1[[1]], 
                 fleetnames = c("ins1"),
                 stocknames =stock_names) %>% 
-  gadget_update("surveyindices",
-                name = "si1",
-                weight = 1,
-                biomass = 1,
-                data = ins1.SI[[1]] %>% filter(step == 4), #not sure why it only takes step = 1
-                fittype = 'fixedslopeloglinearfit',
-                slope = 1,
-                stocknames = stock_names) %>%
-  gadget_update("surveyindices",
-                name = "si2",
-                weight = 1,
-                biomass = 1,
-                data = ins2.SI[[1]],
-                fittype = 'fixedslopeloglinearfit',
-                slope = 1,
-                stocknames = stock_names) %>%
-  # gadget_update("surveyindices", ADD BIOMASS = 1
+  # gadget_update("surveyindices",
   #               name = "si1",
   #               weight = 1,
-  #               data = ins.SI1[[1]],
-  #               fittype = 'loglinearfit',
-  #               stocknames = stock_names) %>%
-  # gadget_update("surveyindices",
-  #               name = "si2",
-  #               weight = 1,
-  #               data = ins.SI2[[1]],
+  #               biomass = 1,
+  #               data = ins1.SI[[1]] %>% filter(step == 4), #not sure why it only takes step = 1
   #               fittype = 'fixedslopeloglinearfit',
   #               slope = 1,
   #               stocknames = stock_names) %>%
   # gadget_update("surveyindices",
-  #               name = "si3",
+  #               name = "si2",
   #               weight = 1,
-  #               data = ins.SI3[[1]],
+  #               biomass = 1,
+  #               data = ins2.SI[[1]],
   #               fittype = 'fixedslopeloglinearfit',
-  #               slope=1,
+  #               slope = 1,
   #               stocknames = stock_names) %>%
-  # gadget_update("surveyindices",
-  #               name = "si4",
-  #               weight = 1,
-  #               data = ins.SI4[[1]],
-  #               fittype = 'fixedslopeloglinearfit',
-  #               slope=1,
-  #               stocknames = stock_names) %>%
-  # gadget_update("surveyindices",
-  #               name = "si5",
-  #               weight = 1,
-  #               data = ins.SI5[[1]],
-  #               fittype = 'fixedslopeloglinearfit',
-  #               slope=1,
-  #               stocknames = stock_names) %>%
-  # gadget_update("surveyindices",
-  #               name = "si6",
-  #               weight = 1,
-  #               data = ins.SI6[[1]],
-  #               fittype = 'fixedslopeloglinearfit',
-  #               slope=1,
-  #               stocknames = stock_names) %>%
-  # gadget_update("surveyindices",
-  #               name = "si7",
-  #               weight = 1,
-  #               data = ins.SI7[[1]],
-  #               fittype = 'fixedslopeloglinearfit',
-  #               slope=1,
-  #               stocknames = stock_names) %>%
-   write.gadget.file(gd$dir)
+gadget_update("surveyindices",
+              name = "ins1.si1",
+              weight = 1,
+               biomass = 1,
+              data = ins1.SI1[[1]],
+              fittype = 'loglinearfit',
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins1.si2",
+              weight = 1,
+               biomass = 1,
+              data = ins1.SI2[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope = 1,
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins1.si3",
+              weight = 1,
+               biomass = 1,
+              data = ins1.SI3[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope=1,
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins1.si4",
+              weight = 1,
+               biomass = 1,
+              data = ins1.SI4[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope=1,
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins1.si5",
+              weight = 1,
+               biomass = 1,
+              data = ins1.SI5[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope=1,
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins1.si6",
+              weight = 1,
+               biomass = 1,
+              data = ins1.SI6[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope=1,
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins1.si7",
+              weight = 1,
+               biomass = 1,
+              data = ins1.SI7[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope=1,
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins2.si1",
+              weight = 1,
+               biomass = 1,
+              data = ins2.SI1[[1]],
+              fittype = 'loglinearfit',
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins2.si2",
+              weight = 1,
+               biomass = 1,
+              data = ins2.SI2[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope = 1,
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins2.si3",
+              weight = 1,
+               biomass = 1,
+              data = ins2.SI3[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope=1,
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins2.si4",
+              weight = 1,
+               biomass = 1,
+              data = ins2.SI4[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope=1,
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins2.si5",
+              weight = 1,
+               biomass = 1,
+              data = ins2.SI5[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope=1,
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins2.si6",
+              weight = 1,
+               biomass = 1,
+              data = ins2.SI6[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope=1,
+              stocknames = stock_names) %>%
+gadget_update("surveyindices",
+              name = "ins2.si7",
+              weight = 1,
+               biomass = 1,
+              data = ins2.SI7[[1]],
+              fittype = 'fixedslopeloglinearfit',
+              slope=1,
+              stocknames = stock_names) %>%
+write.gadget.file(gd$dir)

@@ -10,7 +10,7 @@ ldist.ins1 <-
                     c('age', 'length'), 
                     c(list(
                       data_source = 'iceland-ldist',
-                      sampling_type = c('INS', 'XS','XINS'),
+                      sampling_type = c('INS'), #c('INS', 'XS','XINS'),
                       #month = 9:11,
                       gear=c('SHT'),
                       age = mfdb_interval("all",c(minage,maxage),
@@ -25,7 +25,7 @@ ldist.ins2 <-
                     c('age', 'length'), 
                     c(list(
                       data_source = 'iceland-ldist',
-                      sampling_type = c('INS','XS','XINS'), #XS and XINS contribute nothing 
+                      sampling_type = c('INS'), #c('INS','XS','XINS'), #XS and XINS contribute nothing 
                       #month = 9:11,
                       gear=c('TMS'),
                       age = mfdb_interval("all",c(minage,maxage),
