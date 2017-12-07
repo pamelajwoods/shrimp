@@ -64,11 +64,11 @@ sh.imm <-
   gadget_update('initialconditions',
                 normalparam = data_frame(age = .[[1]]$minage:.[[1]]$maxage,
                                          area = 1,
-                                         age.factor = parse(text=sprintf('exp(-1*(shimm.M+sh.init.F)*%1$s)*shimm.init.%1$s',age)) %>% 
+                                         age.factor = parse(text=sprintf('exp(-1*(shimm.M+sh.init.F)*%1$s)*shimm.init.%1$s',age[c(1:(length(age)-1),(length(age)-1))])) %>% 
                                            map(to.gadget.formulae) %>% 
                                            unlist(),   
                                          area.factor = '#shimm.init.scalar',
-                                         mean = c(1, 1.5, 1.75, 2, 2.25, 2.75),#von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'), # 
+                                         mean = c(1, 1.5, 1.7, 1.9, 2, 2.3),#von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'), # 
                                          stddev = init.sigma$ms[age],
                                          alpha = '#shimm.walpha',
                                          beta = '#shimm.wbeta')) %>% 
@@ -86,7 +86,7 @@ sh.imm <-
                 transitionstep = 2) %>% 
   gadget_update('doesrenew',
                 normalparam = data_frame(year = year_range,
-                                         step = 1,
+                                         step = 3,
                                          area = 1,
                                          age = .[[1]]$minage,
                                          number = parse(text=sprintf('sh.rec.scalar*sh.rec.%s',year)) %>% 
@@ -119,11 +119,11 @@ sh.mat <-
   gadget_update('initialconditions',
                 normalparam = data_frame(age = .[[1]]$minage:.[[1]]$maxage,
                                          area = 1,
-                                         age.factor = parse(text=sprintf('exp(-1*(shmat.M+sh.init.F)*%1$s)*shmat.init.%1$s',age)) %>% 
+                                         age.factor = parse(text=sprintf('exp(-1*(shmat.M+sh.init.F)*%1$s)*shmat.init.%1$s',age[c(1:(length(age)-1),(length(age)-1))])) %>% 
                                            map(to.gadget.formulae) %>% 
                                            unlist(),
                                          area.factor = '#shmat.init.scalar',
-                                         mean = c(1, 1.5, 1.75, 2, 2.25, 2.75),#von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'),#
+                                         mean = c(1, 1.5, 1.7, 1.9, 2, 2.3),#von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'),#
                                          stddev = init.sigma$ms[age],
                                          alpha = '#shmat.walpha',
                                          beta = '#shmat.wbeta')) %>% 
@@ -148,17 +148,17 @@ callGadget(s=1,log = 'init.log') #ignore.stderr = FALSE,
 
 ## update the input parameters with sane initial guesses
 read.gadget.parameters(sprintf('%s/params.out',gd$dir)) %>% 
-  init_guess('rec.[0-9]|init.[0-9]',1,0.001,500,1) %>%
+  init_guess('rec.[0-9]|init.[0-9]',600,0.001,800,1) %>%
   init_guess('recl',1,0.9,1.1,1) %>% 
   init_guess('rec.sd',0.05, 0.01, 0.1,1) %>% 
-  init_guess('Linf',3, 2.5, 5,1) %>% 
-  init_guess('k$',350, 30, 500,1) %>% 
+  init_guess('Linf',2.5, 2, 3.5,1) %>% 
+  init_guess('k$',350, 200, 500,1) %>% 
   init_guess('bbin',5, 1, 8, 1) %>% 
-  init_guess('alpha', 300,  100, 1000, 1) %>% 
-  init_guess('l50',1,0.4,1.5,1) %>% 
+  init_guess('alpha', 35,  0.1, 50, 1) %>% 
+  init_guess('l50',1.4,0.4,1.8,1) %>% 
   init_guess('walpha',lw.constants$estimate[1], 1e-10, 1,0) %>% 
   init_guess('wbeta',lw.constants$estimate[2], 2, 4,0) %>% 
-  init_guess('M$',0.6,0.001,1,0) %>% 
+  init_guess('M$',0.75,0.001,1,0) %>% 
   init_guess('rec.scalar',400,1,500,0) %>% 
   init_guess('init.scalar',400,1,500,1) %>% 
   init_guess('mat2',mat.l50$l50,0.9*mat.l50$l50,1.1*mat.l50$l50,1) %>% 

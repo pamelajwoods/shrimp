@@ -43,7 +43,7 @@ gadgetlikelihood('likelihood',gd$dir,missingOkay = TRUE) %>%
   gadget_update("stockdistribution",
                 name = "matp.ins1",
                 weight = 1,
-                data = matp.ins1[[1]], 
+                data = matp.ins1[[1]] %>% filter(year > 1993), 
                 fleetnames = c("ins1"),
                 stocknames =stock_names) %>% 
   # gadget_update("surveyindices",
