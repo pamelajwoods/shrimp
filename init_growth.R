@@ -32,6 +32,10 @@ init_growth<-function(dl = 1, n_ages = 10, first3ages = 1:3, first3lengths = c(1
     return(suggestions)
 }
 
+plot(c(0.25, 0.29, 0.37, 0.34, 0.32, 0.46, 0.29, 0.47, 0.33, 0.26)~c(2006:2015), type = 'l')
+
 plot_init_growth<-function(suggestions){
   
 }
+
+

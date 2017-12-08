@@ -56,7 +56,7 @@ sh.imm <-
                 livesonareas = 1) %>%
   gadget_update('doesgrow', ## note to self the order of these parameters make difference
                 growthparameters=c(linf='#sh.Linf', 
-                                   k=to.gadget.formulae(quote(0.001*shimm.k)),
+                                   k=to.gadget.formulae(quote(length.rate.scalar*shimm.k)),
                                    alpha = '#shimm.walpha',
                                    beta = '#shimm.wbeta'),
                 beta = to.gadget.formulae(quote(10*sh.bbin)),
@@ -64,11 +64,11 @@ sh.imm <-
   gadget_update('initialconditions',
                 normalparam = data_frame(age = .[[1]]$minage:.[[1]]$maxage,
                                          area = 1,
-                                         age.factor = parse(text=sprintf('exp(-1*(shimm.M+sh.init.F)*%1$s)*shimm.init.%1$s',age[c(1:(length(age)-1),(length(age)-1))])) %>% 
+                                         age.factor = parse(text=sprintf('exp(-1*(shimm.M+sh.init.F)*%1$s)*shimm.init.%1$s*(1-1/(1+exp(-3*(%1$s-2.5))))',age[c(1:(length(age)-1),(length(age)-1))])) %>% 
                                            map(to.gadget.formulae) %>% 
                                            unlist(),   
                                          area.factor = '#shimm.init.scalar',
-                                         mean = c(1, 1.5, 1.7, 1.9, 2, 2.3),#von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'), # 
+                                         mean = c(1, 1.4, 1.7, 1.8, 1.9, 2.1), #von_b_formula(age*c(1, 0.9, rep(0.7, 4)),linf='sh.Linf',k='shimm.k',recl='sh.recl.1988'), # 
                                          stddev = init.sigma$ms[age],
                                          alpha = '#shimm.walpha',
                                          beta = '#shimm.wbeta')) %>% 
@@ -80,7 +80,7 @@ sh.imm <-
   gadget_update('doesmature', 
                 maturityfunction = 'continuous',
                 maturestocksandratios = 'shmat 1',
-                coefficients = '( * 0.001 #sh.mat1) #sh.mat2 0 0') %>% 
+                coefficients = '( * #length.rate.scalar #sh.mat1) #sh.mat2 0 0') %>% 
   gadget_update('doesmove',
                 transitionstocksandratios = 'shmat 1',
                 transitionstep = 2) %>% 
@@ -92,7 +92,10 @@ sh.imm <-
                                          number = parse(text=sprintf('sh.rec.scalar*sh.rec.%s',year)) %>% 
                                            map(to.gadget.formulae) %>% 
                                            unlist(),
-                                         mean ='#sh.recl',#von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'), # 
+                                         mean = parse(text=sprintf('sh.recl.%s',year)) %>% 
+                                           map(to.gadget.formulae) %>% 
+                                           unlist(),
+                                           #'#sh.recl',#von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'), # 
                                          stddev = '#sh.rec.sd',
                                          alpha = '#shimm.walpha',
                                          beta = '#shimm.wbeta')) #this shimm.k was shmat.k
@@ -111,7 +114,7 @@ sh.mat <-
                 livesonareas = 1) %>%
   gadget_update('doesgrow', ## note to self the order of these parameters make difference
                 growthparameters=c(linf='#sh.Linf', 
-                                   k=to.gadget.formulae(quote(0.001*shimm.k)),
+                                   k=to.gadget.formulae(quote(length.rate.scalar*shimm.k)),
                                    alpha = '#shimm.walpha',
                                    beta = '#shimm.wbeta'),
                 beta = to.gadget.formulae(quote(10*sh.bbin)),
@@ -119,11 +122,11 @@ sh.mat <-
   gadget_update('initialconditions',
                 normalparam = data_frame(age = .[[1]]$minage:.[[1]]$maxage,
                                          area = 1,
-                                         age.factor = parse(text=sprintf('exp(-1*(shmat.M+sh.init.F)*%1$s)*shmat.init.%1$s',age[c(1:(length(age)-1),(length(age)-1))])) %>% 
+                                         age.factor = parse(text=sprintf('exp(-1*(shmat.M+sh.init.F)*%1$s)*shmat.init.%1$s*1/(1+exp(-3*(%1$s-2.5)))',age[c(1:(length(age)-1),(length(age)-1))])) %>% 
                                            map(to.gadget.formulae) %>% 
                                            unlist(),
                                          area.factor = '#shmat.init.scalar',
-                                         mean = c(1, 1.5, 1.7, 1.9, 2, 2.3),#von_b_formula(age,linf='sh.Linf',k='shimm.k',recl='sh.recl'),#
+                                         mean = c(1, 1.4, 1.7, 1.8, 1.9, 2.1)*c(0.7, 0.9, rep(1, 4)),#von_b_formula(age*c(0.7, 0.9, rep(1, 4)),linf='sh.Linf',k='shimm.k',recl='sh.recl.1988'),#
                                          stddev = init.sigma$ms[age],
                                          alpha = '#shmat.walpha',
                                          beta = '#shmat.wbeta')) %>% 
@@ -148,11 +151,11 @@ callGadget(s=1,log = 'init.log') #ignore.stderr = FALSE,
 
 ## update the input parameters with sane initial guesses
 read.gadget.parameters(sprintf('%s/params.out',gd$dir)) %>% 
-  init_guess('rec.[0-9]|init.[0-9]',600,0.001,800,1) %>%
-  init_guess('recl',1,0.9,1.1,1) %>% 
+  init_guess('rec.[0-9]|init.[0-9]',600,0.001,2000,1) %>%
+  init_guess('recl',1.1,1,1.3,1) %>% 
   init_guess('rec.sd',0.05, 0.01, 0.1,1) %>% 
   init_guess('Linf',2.5, 2, 3.5,1) %>% 
-  init_guess('k$',350, 200, 500,1) %>% 
+  init_guess('k$',.350, .200, .500,1) %>% 
   init_guess('bbin',5, 1, 8, 1) %>% 
   init_guess('alpha', 35,  0.1, 50, 1) %>% 
   init_guess('l50',1.4,0.4,1.8,1) %>% 
@@ -160,10 +163,11 @@ read.gadget.parameters(sprintf('%s/params.out',gd$dir)) %>%
   init_guess('wbeta',lw.constants$estimate[2], 2, 4,0) %>% 
   init_guess('M$',0.75,0.001,1,0) %>% 
   init_guess('rec.scalar',400,1,500,0) %>% 
-  init_guess('init.scalar',400,1,500,1) %>% 
+  init_guess('init.scalar',400,1,1000,1) %>% 
   init_guess('mat2',mat.l50$l50,0.9*mat.l50$l50,1.1*mat.l50$l50,1) %>% 
-  init_guess('mat1',5000, 2000, 20000, 1) %>% 
+  init_guess('mat1',5, 2, 20, 1) %>% 
   init_guess('init.F',0.15,0.1,1,1) %>% 
+  init_guess('length.rate.scalar',1,0.1,1,0) %>% 
   # init_guess('p0',0,0,1,1) %>% 
   # init_guess('p2',1,0,1,1) %>% 
   # init_guess('p3',1,0.01,100,1) %>% 

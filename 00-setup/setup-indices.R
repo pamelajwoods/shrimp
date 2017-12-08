@@ -48,7 +48,7 @@ ins1.SI3 <-
     data_source = 'iceland-ldist', 
     sampling_type = c('INS'),#
     gear = 'SHT',
-    length = mfdb_interval("len", c(1.3, 1.5))),
+    length = mfdb_interval("len", c(1.3, 1.55))),
     defaults))
 
 ins1.SI4 <- 
@@ -56,7 +56,7 @@ ins1.SI4 <-
     data_source = 'iceland-ldist', 
     sampling_type = c('INS'),#
     gear = 'SHT',
-    length = mfdb_interval("len", c(1.5, 1.7))),
+    length = mfdb_interval("len", c(1.55, 1.7))),
     defaults))
 
 ins1.SI5 <- 
@@ -104,7 +104,7 @@ ins2.SI3 <-
     data_source = 'iceland-ldist', 
     sampling_type = c('INS'),# #XS and XINS contribute nothing
     gear = 'TMS',
-    length = mfdb_interval("len", c(1.3, 1.5))),
+    length = mfdb_interval("len", c(1.3, 1.55))),
     defaults))
 
 ins2.SI4 <- 
@@ -112,7 +112,7 @@ ins2.SI4 <-
     data_source = 'iceland-ldist', 
     sampling_type = c('INS'),# #XS and XINS contribute nothing
     gear = 'TMS',
-    length = mfdb_interval("len", c(1.5, 1.7))),
+    length = mfdb_interval("len", c(1.55, 1.7))),
     defaults))
 
 ins2.SI5 <- 
