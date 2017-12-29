@@ -113,7 +113,7 @@ arnar.h <- c('D11-88' ,  'D11-89' ,  'D8-90' ,
              'D7-2006' ,  'D7-2007' ,  'D12-2008' ,
              'D13-2009' ,  'D12-2010' ,  'D8-2011' ,
              'D9-2012' ,  'D7-2013' ,  'D7-2014' ,
-             'D4-2015' ,  'B15-2016' , 'GUI-2017')
+             'D4-2015' ,  'B15-2016' , 'GU1-2017')
 arnar.v <- c('L4-88' , 'L3-89' , 'L7-90' ,
              'VER-91' , 'LISU1-92' , 'D1-93' ,
              'D2-94' , 'D1-95' , 'D1-96' ,
@@ -132,7 +132,7 @@ isa.h <- c('D11-88' , 'D11-89' , 'D8-90' ,
            'D4-2006' , 'D6-2007' , 'D11-2008' ,
            'D12-2009' , 'D14-2010' , 'D8-2011' ,
            'D9-2012' , 'D5-2013' , 'D7-2014' ,
-           'D4-2015' , 'B15-2016','GUI-2017')
+           'D4-2015' , 'B15-2016','GU1-2017')
 isa.v <- c('L4-88' , 'L3-89' , 'L3-90' ,
            'LISU1-92' , 'D1-93' ,
            'D2-94' , 'D1-95' , 'D1-96' ,
@@ -2122,9 +2122,11 @@ shrimp_station_fixes <- function(stodvar){
 
 
 
-skala_med_toldum2<-function (lengdir,biom.teg=41)
+skala_med_toldum2<-function (lengdir,biom.teg=list("41" = c(0.000628641104521994, 2.84713109335131,0.1)))
 {
-    ratio <- lesa_numer(lengdir$src) %>% 
+#The end result of this function is 1) counts by length group scaled up to the whole catch size either by numbers in the catch
+#or biomass in the catch, and 2) a mean size-adjusted mean weight that can be summed to form indices 
+      ratio <- lesa_numer(lengdir$src) %>% 
       dplyr::left_join(tbl(mar,'corrected_afli')) %>% 
       dplyr::left_join(tbl(mar,'corrected_vigt_synis')) %>% 
       dplyr::mutate( afli = nvl2(afli.fx, afli.fx, afli),
@@ -2132,11 +2134,57 @@ skala_med_toldum2<-function (lengdir,biom.teg=41)
       dplyr::select(-c(afli.fx, vigt_synis.fx)) %>% 
       dplyr::mutate(r = ifelse(fj_talid == 0, 1, fj_talid/ifelse(fj_maelt == 0, 1, fj_maelt)),
                     biom.r = ifelse(afli == 0, NA, afli/ifelse(vigt_synis == 0, NA, vigt_synis)),
-                    mean_wt = ifelse(vigt_synis == 0, NA, vigt_synis/ifelse(fj_maelt==0, NA, fj_maelt))) %>% 
-      dplyr::select(synis_id, tegund, r, biom.r, mean_wt) 
-    lengdir %>% 
-      dplyr::left_join(ratio) %>% 
-      dplyr::mutate(fjoldi = fjoldi * ifelse(tegund %in% biom.teg, biom.r, r))
+                    #simplemean_wt that biases toward overestimates of small individuals
+                    simplemean_wt = ifelse(vigt_synis == 0, NA, vigt_synis/ifelse(fj_maelt==0, NA, fj_maelt))) %>% 
+      dplyr::select(synis_id, tegund, r, biom.r, simplemean_wt, vigt_synis, fj_maelt) 
+    
+    biom_spp <- as.numeric(names(biom.teg))
+    
+    biom.mat<-
+      tibble::as.tibble(biom.teg) %>% 
+      tidyr::gather() %>% 
+      dplyr::mutate(ind = rep(c('a','b','s'),length(biom.teg))) %>% 
+      tidyr::spread(ind, value) 
+    
+    if(sum(biom.mat$s>1)){
+      'Warning: interval scales > 1 are not recommended'
+    }
+    
+    dbRemoveTable(mar,'biom.mat')
+    dbWriteTable(mar, 'biom.mat', biom.mat)
+    
+    lengdir.tmp <-
+      lengdir %>%
+      dplyr::left_join(tbl(mar,'biom.mat'), by = c('tegund' = 'key')) %>% 
+      dplyr::mutate(lengd_scaler = ifelse(s==0 | is.na(s)==1, 1, 1/s),
+             lengd_interval = round(lengd_scaler*lengd)/lengd_scaler) %>% 
+      dplyr::left_join(ratio) 
+    
+    lengdir.tmp2 <-
+      lengdir.tmp %>% 
+      dplyr::group_by(synis_id, tegund, lengd_interval) %>%
+      dplyr::summarise(fjoldi_by_int = sum(fjoldi)) %>%
+      dplyr::right_join(lengdir.tmp)
+
+    lengdir.tmp3<- 
+      lengdir.tmp2 %>% 
+      dplyr::group_by(synis_id, tegund) %>% 
+      dplyr::summarise(fjoldi_sum = sum(fjoldi)) %>% 
+      dplyr::right_join(lengdir.tmp2) %>% 
+      dplyr::mutate(fjoldi_prop_weighted = ifelse(fjoldi_sum*a*lengd_interval^b==0, NA,fjoldi_by_int/fjoldi_sum*a*lengd_interval^b))
+    
+    lengdir.tmp4<-
+      lengdir.tmp3 %>% 
+      dplyr::group_by(synis_id,tegund) %>% 
+      dplyr::summarise(fjoldi_prop_weighted_sum = sum(fjoldi_prop_weighted)) %>% 
+      dplyr::right_join(lengdir.tmp3) %>% 
+      dplyr::mutate(biom_prop = ifelse(fjoldi_prop_weighted_sum==0, NA, fjoldi_prop_weighted/fjoldi_prop_weighted_sum)) %>% 
+      dplyr::mutate(mean_wt = biom_prop*ifelse(fjoldi_by_int==0, NA, ifelse(vigt_synis == 0, NA, vigt_synis)/fjoldi_by_int)) %>% 
+      dplyr::mutate(fjoldi = fjoldi*ifelse(tegund %in% biom_spp, biom.r, r)) %>% 
+      dplyr::select(-c(vigt_synis, fj_maelt, simplemean_wt, lengd_interval, lengd_scaler, a, b, s,
+                       fjoldi_by_int, fjoldi_sum, fjoldi_prop_weighted, fjoldi_prop_weighted_sum, biom_prop))
+    
+    return(lengdir.tmp4)
 }
 
 

@@ -1,7 +1,7 @@
-devtools::install_github('mareframe/mfdb',ref='5.x')
-devtools::install_github('fishvice/mar', force = TRUE)
-devtools::install_github('Hafro/rgadget')
-install.packages("tidyverse")
+#devtools::install_github('mareframe/mfdb',ref='5.x')
+#devtools::install_github('fishvice/mar', force = TRUE)
+#devtools::install_github('Hafro/rgadget')
+#install.packages("tidyverse")
 library(mfdb)
 library(tidyverse)
 library(mar)
@@ -274,7 +274,7 @@ mfdb_import_vessel_taxonomy(mdb,data.frame(name='-0',length=NA,tonnage=NA,power=
 ## length distributions
 dbRemoveTable(mar,'ldist')
 lesa_lengdir(mar) %>% 
-  inner_join(tbl(mar,'species_key')) %>% #as.tibble() %>% View()
+  inner_join(tbl(mar,'species_key')) %>%  #as.tibble() %>% View()
   skala_med_toldum2() %>% 
   rename(tow=synis_id) %>% 
   compute(name='ldist',temporary=FALSE)

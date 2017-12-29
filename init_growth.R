@@ -14,9 +14,9 @@ init_growth<-function(dl = 1, n_ages = 10, first3ages = 1:3, first3lengths = c(1
       mat_l50_bounds<-
         #make sure these do not return Inf
         #maturity
-        1/(1+exp(-0.001*10000*(c(1, 1.5, 1.7, 1.9, 2, 2.3)-1.8)))
+        1/(1+exp(-20*(c(1, 1.5, 1.7, 1.9, 2, 2.3)-1.8)))
       #suitability
-      1/(1+exp(-0.1*(seq(1.3,1.55,0.05)-1.4)))
+      1/(1+exp(-25*(seq(1.3,2,0.05)-1.8)))
       #vb growth
       (3.2 - 2.5)*(1-exp(-0.001*266*1))
         

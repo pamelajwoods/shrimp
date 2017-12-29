@@ -4,15 +4,18 @@ maxlength <- sh.mat[[1]]$maxlength
 minlength <- sh.imm[[1]]$minlength
 dl <- sh.imm[[1]]$dl
 
+sample_sources <- c('INS','XS','XINS')
+
+
 ## Query length data to create IGFS catchdistribution components
 ldist.ins1 <-
   mfdb_sample_count(mdb, 
                     c('age', 'length'), 
                     c(list(
                       data_source = 'iceland-ldist',
-                      sampling_type = c('INS'), #c('INS', 'XS','XINS'),
+                      sampling_type = sample_sources, #c('INS', 'XS','XINS'),
                       #month = 9:11,
-                      gear=c('SHT'),
+                      #gear=c('SHT'),
                       age = mfdb_interval("all",c(minage,maxage),
                                        open_ended = c("upper","lower")),
                       length = mfdb_interval("len", 
@@ -25,9 +28,9 @@ ldist.ins2 <-
                     c('age', 'length'), 
                     c(list(
                       data_source = 'iceland-ldist',
-                      sampling_type = c('INS'), #c('INS','XS','XINS'), #XS and XINS contribute nothing 
+                      sampling_type = sample_sources, #c('INS','XS','XINS'), #XS and XINS contribute nothing 
                       #month = 9:11,
-                      gear=c('TMS'),
+                      #gear=c('TMS'),
                       age = mfdb_interval("all",c(minage,maxage),
                                           open_ended = c("upper","lower")),
                       length = mfdb_interval("len", 

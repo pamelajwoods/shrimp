@@ -51,7 +51,7 @@ gadget_update('totalfleet',
                 suitability = paste0('\n',
                                      paste(c('shimm','shmat'),
                                            'function','exponentiall50',
-                                           '#sh.tms.alpha','#sh.tms.l50',
+                                           '#sh.ins1.alpha','#sh.ins1.l50',
                                            collapse='\n')),
                 data = ins2.landings) %>%
   
@@ -61,7 +61,7 @@ gadget_update('totalfleet',
                   paste0('\n',
                          paste(c('shimm','shmat'),
                                'function','exponentiall50',
-                               '#sh.tms.alpha','#sh.tms.l50',
+                               '#sh.ins1.alpha','#sh.ins1.l50',
                                collapse='\n')),
                 data = tms.landings) %>% 
 write.gadget.file(gd$dir)
