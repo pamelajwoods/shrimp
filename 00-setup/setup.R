@@ -15,7 +15,7 @@ gd <- gadget_directory("01-firsttry")
 mar <- dbConnect(dbDriver('Oracle'))
 mdb<-mfdb('Iceland')#,db_params=list(host='hafgeimur.hafro.is'))
 
-year_range <- 1986:2016 #CHANGE?
+year_range <- 1986:2017 
 base_dir <- '41-shrimp'
 mat_stock <- 'shmat'
 imm_stock <- 'shimm'
@@ -60,6 +60,7 @@ gadget_areafile(
   gadget_dir_write(gd,.)
 
 source('../R/utils.R')
+source('00-setup/setup-timevariablefiles.R')
 source('00-setup/setup-fleets.R')
 source('00-setup/setup-model.R')
 source('00-setup/setup-catchdistribution.R')
